@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guess the Number Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #result {
+            font-size: 20px;
+        }
+        #countdown {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>1-100ын хооронд нэг тоо таагаарай</h1>
+<p>Sainaas game:</p>
+<input type="number" id="guess" min="1" max="100">
+<button onclick="checkGuess()">Submit Guess</button>
+<p id="result"></p>
+<p id="countdown">Time left: <span id="timer">60</span> seconds</p>
+
+<script>
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    let timerValue = 60; // Time limit in seconds
+
+    const timerElement = document.getElementById("timer");
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    function updateTimer() {
+        timerValue--;
+        timerElement.textContent = timerValue;
+        if (timerValue === 0) {
+            clearInterval(timerInterval);
+            document.getElementById("guess").disabled = true;
+            document.getElementById("result").textContent = "Time's up! You lose. The number was " + randomNumber;
+        }
+    }
+
+    function checkGuess() {
+        const guess = parseInt(document.getElementById("guess").value);
+
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            document.getElementById("result").textContent = "Please enter a valid number between 1 and 100.";
+        } else {
+            attempts++;
+            if (guess < randomNumber) {
+                document.getElementById("result").textContent = `Try higher! Attempts: ${attempts}`;
+            } else if (guess > randomNumber) {
+                document.getElementById("result").textContent = `Try lower! Attempts: ${attempts}`;
+            } else {
+                clearInterval(timerInterval);
+                document.getElementById("result").textContent = `Congratulations! You guessed the number ${randomNumber} in ${attempts} attempts.`;
+                document.getElementById("guess").disabled = true;
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
